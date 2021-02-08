@@ -18,11 +18,11 @@ app.get('/', (req, res) => res.send('API Running'));
 
 //app.use('/uploads', express.static('uploads'));
 //Define Routes
-/* app.use('/api/users', require('./routes/api/users'));
+app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
-app.use('/api/profile', require('./routes/api/profile'));
-app.use('/api/posts', require('./routes/api/posts'));
-app.use('/api/imgUpload', require('./routes/api/imgUpload')); */
+app.use('/api/cities', require('./routes/api/cities'));
+app.use('/api/itineraries', require('./routes/api/itineraries'));
+//app.use('/api/imgUpload', require('./routes/api/imgUpload'));
 
 
  
