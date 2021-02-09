@@ -2,7 +2,8 @@ const express = require('express');
 const connectDB = require('./config/db')
 const app = express();
 
- 
+ //const bodyParser = require('body-parser');
+/*const methodOverride = require('method-override'); */ 
 
 
 //Connect Database
