@@ -20,7 +20,7 @@ app.get('/', (req, res) => res.send('API Running'));
 //Define Routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
-app.use('/api/cities', require('./routes/api/cities'));
+app.use('/api/city', require('./routes/api/city'));
 app.use('/api/itineraries', require('./routes/api/itineraries'));
 //app.use('/api/imgUpload', require('./routes/api/imgUpload'));
 
