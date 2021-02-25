@@ -68,4 +68,34 @@ router.get('/:city',auth, async (req, res) => {
     }
 })
 
+// @route    DELETE api/itineraries/:id
+// @desc     Delete an itinerary
+// @access   Private
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    const itinerary = await Itinerary.findById(req.params.id);
+
+    if (!itinerary) {
+      return res.status(404).json({ msg: 'Itinerarynot found' });
+    }
+
+    //Check User
+    if (itinerary.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'User not authorised' });
+    }
+
+    await itinerary.remove();
+
+    res.json({ msg: 'Itinerary removed' });
+  } catch (err) {
+
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'Itinerary not found' });
+    }
+    
+      res.status(500).send('Server Error');
+  }
+})
+
+
 module.exports = router;
