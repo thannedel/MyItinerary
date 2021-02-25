@@ -13,9 +13,9 @@ router.post('/',
     [
     auth,
     [
-      check('name', 'name is required').not().isEmpty(),
-        check('country', 'Country is required').not().isEmpty(),
-       check('description', 'description is required').not().isEmpty(),
+        check('name', 'name is required').not().isEmpty(),
+        check('name', 'name is required').not().isEmpty(),
+        check('description', 'description is required').not().isEmpty(),
         check('img', 'Image is required').not().isEmpty()
     ]
     ],
@@ -39,19 +39,10 @@ router.post('/',
         if (description) profileFields.description = description;
         if (img) profileFields.img = img;
         
-
-        
-
         try {
-            let city = await City.findOne({ name: req.name });
+            let city = await City.findOne({ name: req.body.name });
             if (city) {
-                //Update
-                city = await City.findOneAndUpdate(
-                    { name: req.name },
-                    { $set: profileFields },
-                    { new: true });
-                
-                return res.json(city);
+                return res.json(name +' already exists');
             }
 
             //Create
@@ -64,8 +55,6 @@ router.post('/',
             res.status(500).send('Server Error');
        }
 })
-
-
 
 
 //@route Get api/cities
