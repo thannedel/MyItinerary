@@ -50,8 +50,8 @@ router.post(
 
 //@route Get api/itineraries
 //@desc Get all itineraries by City
-//@access Private
-router.get('/:city',auth, async (req, res) => {
+//@access Public
+router.get('/:city', async (req, res) => {
     try {
         const itineraries = await Itinerary.find({ city: req.params.city });
         if (!itineraries) return res.status(400).json({ msg: 'Itineraries not found' });
