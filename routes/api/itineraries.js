@@ -1,9 +1,71 @@
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator');
+const auth = require('../../middleware/auth');
+
+const Itinerary = require('../../models/Itinerary');
+const User = require('../../models/User');
+const City = require('../../models/City');
+
+// @route    POST api/itineraries
+// @desc     Create an itinerarie
+// @access   Private
+router.post(
+  '/',
+    [auth,
+        [
+            check('city', 'City is required').not().isEmpty(),
+            check('text', 'Text is required').not().isEmpty(),
+            check('activities', 'Activity is required').not().isEmpty()
+        ]
+    ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+      try {
+        const user = await User.findById(req.user.id).select('-password');
+        
+      const newItinerary = new Itinerary({
+          text: req.body.text,
+          city: req.body.city,
+          username: user.name,
+          avatar: user.avatar,
+          user: req.user.id,
+          activities: req.body.activities
+      });
+
+      const itinerary = await newItinerary.save();
+
+      res.json(itinerary);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
 
 //@route Get api/itineraries
-//@desc test route
-//@access Public
-router.get('/', (req, res) => res.send('itineraries route'))
+//@desc Get all itineraries by City
+//@access Private
+router.get('/:city',auth, async (req, res) => {
+    try {
+        const itineraries = await Itinerary.find({ city: req.params.city });
+        if (!itineraries) return res.status(400).json({ msg: 'Itineraries not found' });
+        res.json(itineraries);
+    } catch (err) {
+        console.error(err.message);
+
+         //checking if the object Id is a valid object id to avoid server error  for invalid ids
+        if (err.kind == 'ObjectId') {  
+           return res.status(400).json({msg:'Itineraries not found'}) 
+        }
+      
+        res.status(500).send('Server Error ')
+    }
+})
 
 module.exports = router;
